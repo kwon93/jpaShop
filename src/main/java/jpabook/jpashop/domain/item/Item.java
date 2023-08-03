@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter //@Setter 는 넣지말고 메서드를 생성해 필드값을 변경하자. (객체지향스럽게)
+@Getter @Setter //는 넣지말고 메서드를 생성해 필드값을 변경하자. (객체지향스럽게)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
 public abstract class Item {
