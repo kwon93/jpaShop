@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "orders")
@@ -26,10 +29,13 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member; //Foreign Key
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //  Cascade 연쇄 작용
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="delivery_id")
     private Delivery delivery;
 
