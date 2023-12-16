@@ -30,11 +30,11 @@ public class Order {
     private Member member; //Foreign Key
 
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //  Cascade 연쇄 작용
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @JsonIgnore
+
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="delivery_id")
     private Delivery delivery;

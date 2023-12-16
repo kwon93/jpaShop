@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+@Table(name = "order_item")
 public class OrderItem {
 
 
@@ -22,7 +23,7 @@ public class OrderItem {
     private Item item;
 
 
-    @JsonIgnore
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
