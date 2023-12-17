@@ -6,6 +6,9 @@ import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.query.OrderFlatDTO;
+import jpabook.jpashop.repository.order.query.OrderQueryDTO;
+import jpabook.jpashop.repository.order.query.OrderQueryRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ import static java.util.stream.Collectors.*;
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     // Entity를 반환하는 V1
     @GetMapping("api/v1/orders")
@@ -63,12 +67,29 @@ public class OrderApiController {
     @GetMapping("api/v3.1/orders")
     public List<OrderDto> ordersV3_page(@RequestParam(value = "offset", defaultValue = "0")int offset,
                                         @RequestParam(value = "limit", defaultValue = "100") int limit ){
-        List<Order> allWithItem = orderRepository.findAllWithMemberDelivery(offset, limit);
-        return allWithItem.stream().map(OrderDto::new).collect(toList());
+
+        return orderRepository.findAllWithMemberDelivery(offset,limit).stream()
+                .map(OrderDto::new)
+                .collect(toList());
     }
 
+    //Query에서 DTO 바로 변환  / N + 1 문제 발생
+    @GetMapping("api/v4/orders")
+    public List<OrderQueryDTO> ordersV4(){
+        return orderQueryRepository.findOrderQueryDtos();
+    }
 
+    //N + 1 해결 1: 1
+    @GetMapping("api/v5/orders")
+    public List<OrderQueryDTO> ordersV5(){
+        return orderQueryRepository.findAllByDto_Optimization();
+    }
 
+    //Query 1개 하지만 애플리케이션 추가 작업이 큼, 페이징 불가능
+    @GetMapping("api/v6/orders")
+    public List<OrderFlatDTO> ordersV6(){
+        return orderQueryRepository.findAllByDto_flat();
+    }
 
 
 
